@@ -114,7 +114,7 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
     })
     .then(response => response.text())
     .then(text => {
-        if (text === "OK") {
+        if (text.trim() === "OK") {
             alert("Usuario registrado correctamente");
             document.getElementById("loginForm").reset();
         } else {
@@ -131,4 +131,5 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
 
 </body>
 </html>
+
 
