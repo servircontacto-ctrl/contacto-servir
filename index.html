@@ -5,30 +5,22 @@
     <title>Acceso de Usuario</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap 5 -->
-    <link 
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
-        rel="stylesheet"
-    >
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Bootstrap Icons -->
-    <link 
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" 
-        rel="stylesheet"
-    >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
         body {
             min-height: 100vh;
             background: linear-gradient(135deg, #2A7B9B, #0044FF);
         }
-
         .login-card {
             border-radius: 16px;
             box-shadow: 0 25px 50px rgba(0,0,0,.2);
             border: none;
         }
-
         .login-icon {
             width: 70px;
             height: 70px;
@@ -41,19 +33,12 @@
             font-size: 32px;
             margin: 0 auto 20px;
         }
-
         .btn-primary {
             background: linear-gradient(135deg, #2A7B9B, #4E70A6);
             border: none;
         }
-
         .btn-primary:hover {
             opacity: .9;
-        }
-
-        .form-control:focus {
-            box-shadow: 0 0 0 .25rem rgba(111, 66, 193, .25);
-            border-color: #7b6cf6;
         }
     </style>
 </head>
@@ -72,27 +57,22 @@
                     </div>
 
                     <h4 class="text-center mb-1">Bienvenido a Servir</h4>
-                    <p class="text-center text-muted mb-4">
-                        Identificación de usuario
-                    </p>
+                    <p class="text-center text-muted mb-4">Identificación de usuario</p>
 
-                    <form id="loginForm" novalidate>
+                    <form id="loginForm">
                         <div class="mb-3">
                             <label class="form-label">Usuario</label>
                             <div class="input-group">
                                 <span class="input-group-text">
                                     <i class="bi bi-person-badge"></i>
                                 </span>
-                                <input 
-                                    type="text" 
+                                <input
+                                    type="text"
                                     class="form-control"
                                     id="username"
                                     placeholder="usuario@fgs.com"
                                     required
                                 >
-                            </div>
-                            <div class="invalid-feedback">
-                                Por favor ingresa tu usuario.
                             </div>
                         </div>
 
@@ -112,9 +92,6 @@
     </div>
 </div>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
 document.getElementById("loginForm").addEventListener("submit", function (e) {
     e.preventDefault();
@@ -126,33 +103,31 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
         return;
     }
 
+    // FormData para evitar CORS
+    const formData = new FormData();
+    formData.append("usuario", username);
+    formData.append("origen", "Login Web");
+
     fetch("https://script.google.com/macros/s/AKfycbyf5jR-1vy80k0inTMDVG0auLfPqIAgbtWRRBGlNpu6i7ubI3kgQqLUUYDWTuarOug2dw/exec", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            usuario: username,
-            origen: "Login Web"
-        })
+        body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === "OK") {
+    .then(response => response.text())
+    .then(text => {
+        if (text === "OK") {
             alert("Usuario registrado correctamente");
             document.getElementById("loginForm").reset();
         } else {
+            console.error(text);
             alert("Error al guardar");
-            console.error(data);
         }
     })
     .catch(error => {
-        alert("Error de conexión");
         console.error(error);
+        alert("Error en la conexión");
     });
 });
 </script>
-
 
 </body>
 </html>
